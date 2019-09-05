@@ -197,8 +197,14 @@ class IncomingTransactionsController {
     if (fromBlock) {
       url += `&startBlock=${parseInt(fromBlock, 10)}`
     }
-    const response = await fetch(url)
-    const parsedResponse = await response.json()
+
+    let parsedResponse = {}
+    try {
+      const response = await fetch(url)
+      parsedResponse = await response.json()
+    } catch (e) {
+      log.error(e)
+    }
 
     return {
       ...parsedResponse,
@@ -207,7 +213,7 @@ class IncomingTransactionsController {
     }
   }
 
-  _processTxFetchResponse ({ status, result, address, currentNetworkID }) {
+  _processTxFetchResponse ({ status = '0', result = [], address, currentNetworkID }) {
     if (status !== '0' && result.length > 0) {
       const remoteTxList = {}
       const remoteTxs = []

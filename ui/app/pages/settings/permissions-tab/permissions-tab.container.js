@@ -7,7 +7,7 @@ import {
   removePermissionsFor,
 } from '../../../store/actions'
 import {
-  getAllPermissions, getPermissionsDescriptions,
+  getAllPermissions, getPermissionsDescriptions, getSiteMetadata
 } from '../../../selectors/selectors'
 
 const mapStateToProps = state => {
@@ -17,6 +17,7 @@ const mapStateToProps = state => {
     warning,
     permissions: getAllPermissions(state),
     permissionsDescriptions: getPermissionsDescriptions(state),
+    siteMetadata: getSiteMetadata(state)
   }
 }
 

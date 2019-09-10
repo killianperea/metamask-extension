@@ -253,7 +253,7 @@ module.exports = class MetamaskController extends EventEmitter {
       openPopup: opts.openPopup,
       closePopup: opts.closePopup,
     },
-    initState.PermissionsController)
+    initState.PermissionsController, initState.SiteMetadata)
 
     this.store.updateStructure({
       AppStateController: this.appStateController.store,
@@ -268,8 +268,8 @@ module.exports = class MetamaskController extends EventEmitter {
       CachedBalancesController: this.cachedBalancesController.store,
       OnboardingController: this.onboardingController.store,
       IncomingTransactionsController: this.incomingTransactionsController.store,
-      // TODO:permissions permissionsRequests should be memStore only
       PermissionsController: this.permissionsController.permissions,
+      SiteMetadata: this.permissionsController.store,
     })
 
     this.memStore = new ComposableObservableStore(null, {
@@ -292,7 +292,7 @@ module.exports = class MetamaskController extends EventEmitter {
       OnboardingController: this.onboardingController.store,
       IncomingTransactionsController: this.incomingTransactionsController.store,
       PermissionsController: this.permissionsController.permissions,
-      SiteMetadata: this.permissionsController.memStore,
+      SiteMetadata: this.permissionsController.store,
     })
     this.memStore.subscribe(this.sendUpdate.bind(this))
   }

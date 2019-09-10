@@ -20,12 +20,14 @@ class PermissionsController {
 
   constructor ({
     openPopup, closePopup, keyringController,
-  } = {}, restoredState) {
-    this.memStore = new ObservableStore({ siteMetadata: {} })
+  } = {}, restoredPermissions = {}, restoredState = { siteMetadata: {} }) {
+    this.store = new ObservableStore({
+      siteMetadata: { ...restoredState.siteMetadata }
+    })
     this._openPopup = openPopup
     this._closePopup = closePopup
     this.keyringController = keyringController
-    this._initializePermissions(restoredState)
+    this._initializePermissions(restoredPermissions)
   }
 
   createMiddleware (options) {
@@ -56,9 +58,9 @@ class PermissionsController {
               req.siteMetadata &&
               typeof req.siteMetadata.name === 'string'
             ) {
-              this.memStore.putState({
+              this.store.putState({
                 siteMetadata: {
-                  ...this.memStore.getState().siteMetadata,
+                  ...this.store.getState().siteMetadata,
                   [req.origin]: req.siteMetadata,
                 },
               })
@@ -155,7 +157,7 @@ class PermissionsController {
    */
   _initializePermissions (restoredState) {
 
-    // TODO:permissions stop persisting permissionsDescriptions and remove this line
+    // these permission requests are almost certainly stale
     const initState = { ...restoredState, permissionsRequests: [] }
 
     this.testProfile = {

@@ -2,15 +2,11 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import deepEqual from 'fast-deep-equal'
 import Button from '../../../components/ui/button'
+import Identicon from '../../../components/ui/identicon'
 // maybe the below instead of checkboxes, some day
 // import ToggleButton from '../../../components/ui/toggle-button'
 
 import { addressSlicer, isValidAddress } from '../../../helpers/utils/util'
-
-// TODO:Bug
-// If the UI is open (probably in its own tab), and new permissions are granted,
-// this errors because the parent object of one of the ".selected" properties
-// here is undefined
 
 export default class PermissionsTab extends Component {
 
@@ -20,6 +16,7 @@ export default class PermissionsTab extends Component {
     permissionsDescriptions: PropTypes.object.isRequired,
     removePermissionsFor: PropTypes.func.isRequired,
     showClearPermissionsModal: PropTypes.func.isRequired,
+    siteMetadata: PropTypes.object,
   }
 
   static contextTypes = {
@@ -66,6 +63,7 @@ export default class PermissionsTab extends Component {
           acc.domains[domain] = {
             permissions: [perm.id],
             selected: true,
+            iconError: false,
           }
         } else {
           acc.domains[domain].permissions.push(perm.id)
@@ -113,6 +111,18 @@ export default class PermissionsTab extends Component {
       newState.domains = domains
     }
     this.setState(newState)
+  }
+
+  onIconError = domain => () => {
+    this.setState({
+      domains: {
+        ...this.state.domains,
+        [domain]: {
+          ...this.state.domains[domain],
+          iconError: true,
+        }
+      }
+    })
   }
 
   updatePermissions () {
@@ -166,15 +176,19 @@ export default class PermissionsTab extends Component {
   }
 
   renderPermissionsList () {
-    const { permissions, permissionsDescriptions } = this.props
+    const { permissions, permissionsDescriptions, siteMetadata } = this.props
     return (
       <ul>
         {
-          Object.keys(permissions).map(domain => {
-            if (permissions[domain].permissions.length === 0) return null
+          Object.keys(permissions).sort().map(domain => {
+            if (
+              permissions[domain].permissions.length === 0 ||
+              !this.state.domains[domain] // state may lag behind props slightly
+            ) return null
+            // TODO: these elements look like trash and their CSS is placeholder only
             return (
               <li key={domain}>
-                <details>
+                <details className="settings-page__content-list-details">
                   <summary>
                     <input
                       type="checkbox"
@@ -182,8 +196,22 @@ export default class PermissionsTab extends Component {
                       onChange={this.onDomainToggle(domain)}
                       className="settings-page__content-list-checkbox"
                     />
+                    {
+                      !this.state.domains[domain].iconError &&
+                      siteMetadata[domain].icon ? (
+                        <img
+                          className="settings-page__content-list-identicon"
+                          src={siteMetadata[domain].icon}
+                          onError={this.onIconError(domain)}
+                        />
+                      ) : (
+                        <i className="settings-page__content-list-indenticon--default">
+                          {siteMetadata[domain].name.charAt(0).toUpperCase()}
+                        </i>
+                      )
+                    }
                     {domain}
-                    <i className="caret" style={{ float: 'right' }}></i>
+                    <i className="caret"></i>
                   </summary>
                   <ul>
                     {

@@ -185,6 +185,10 @@
       margin: 6px 15px 0 0;
     }
 
+    .caret {
+      float: right;
+    }
+
     details[open] > summary > .caret {
       transform: rotate(45deg);
       -webkit-transform: rotate(45deg);
@@ -262,8 +266,31 @@
     }
   }
 
+  &__content-list-details {
+    margin-bottom: 10px;
+  }
+
   &__content-list-checkbox {
     margin-right: 10px;
+  }
+
+  // lifted from permission-page-container
+  // TODO: these look like trash and should be fixed
+  &__content-list-identicon {
+    width: 22px;
+    height: 22px;
+    margin-right: 10px;
+
+    &--default {
+      background-color: #777A87;
+      color: white;
+      width: 22px;
+      height: 22px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
   }
 
   &--selected {

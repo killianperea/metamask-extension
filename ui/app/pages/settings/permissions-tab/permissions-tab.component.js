@@ -2,9 +2,6 @@ import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import deepEqual from 'fast-deep-equal'
 import Button from '../../../components/ui/button'
-import Identicon from '../../../components/ui/identicon'
-// maybe the below instead of checkboxes, some day
-// import ToggleButton from '../../../components/ui/toggle-button'
 
 import { addressSlicer, isValidAddress } from '../../../helpers/utils/util'
 
@@ -120,8 +117,8 @@ export default class PermissionsTab extends Component {
         [domain]: {
           ...this.state.domains[domain],
           iconError: true,
-        }
-      }
+        },
+      },
     })
   }
 
@@ -199,16 +196,16 @@ export default class PermissionsTab extends Component {
                     {
                       !this.state.domains[domain].iconError &&
                       siteMetadata[domain].icon ? (
-                        <img
-                          className="settings-page__content-list-identicon"
-                          src={siteMetadata[domain].icon}
-                          onError={this.onIconError(domain)}
-                        />
-                      ) : (
-                        <i className="settings-page__content-list-indenticon--default">
-                          {siteMetadata[domain].name.charAt(0).toUpperCase()}
-                        </i>
-                      )
+                          <img
+                            className="settings-page__content-list-identicon"
+                            src={siteMetadata[domain].icon}
+                            onError={this.onIconError(domain)}
+                          />
+                        ) : (
+                          <i className="settings-page__content-list-indenticon--default">
+                            {siteMetadata[domain].name.charAt(0).toUpperCase()}
+                          </i>
+                        )
                     }
                     {domain}
                     <i className="caret"></i>

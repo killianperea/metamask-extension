@@ -22,7 +22,7 @@ class PermissionsController {
     openPopup, closePopup, keyringController,
   } = {}, restoredPermissions = {}, restoredState = { siteMetadata: {} }) {
     this.store = new ObservableStore({
-      siteMetadata: { ...restoredState.siteMetadata }
+      siteMetadata: { ...restoredState.siteMetadata },
     })
     this._openPopup = openPopup
     this._closePopup = closePopup

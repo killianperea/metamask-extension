@@ -7,7 +7,10 @@ import {
   removePermissionsFor,
 } from '../../../store/actions'
 import {
-  getAllPermissions, getPermissionsDescriptions, getSiteMetadata,
+  getAllPermissions,
+  getPermissionsDescriptions,
+  getSiteMetadata,
+  getPermissionsLog,
 } from '../../../selectors/selectors'
 
 const mapStateToProps = state => {
@@ -18,6 +21,7 @@ const mapStateToProps = state => {
     permissions: getAllPermissions(state),
     permissionsDescriptions: getPermissionsDescriptions(state),
     siteMetadata: getSiteMetadata(state),
+    permissionsLog: getPermissionsLog(state),
   }
 }
 
@@ -25,6 +29,9 @@ const mapDispatchToProps = dispatch => {
   return {
     showClearPermissionsModal: () => dispatch(
       showModal({ name: 'CLEAR_PERMISSIONS' })
+    ),
+    showClearPermissionsActivityModal: () => dispatch(
+      showModal({ name: 'CLEAR_PERMISSIONS_ACTIVITY' })
     ),
     removePermissionsFor: (domains) => dispatch(
       removePermissionsFor(domains)

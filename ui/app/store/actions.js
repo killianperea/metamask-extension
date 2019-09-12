@@ -348,9 +348,10 @@ var actions = {
 
   // Permissions
   approvePermissionsRequest,
+  clearPermissions,
+  clearPermissionsLog,
   rejectPermissionsRequest,
   removePermissionsFor,
-  clearPermissions,
   selectApprovedAccount,
 
   setFirstTimeFlowType,
@@ -2697,6 +2698,15 @@ function removePermissionsFor (domains) {
 function clearPermissions () {
   return () => {
     background.clearPermissions()
+  }
+}
+
+/**
+ * Clears the permission log.
+ */
+function clearPermissionsLog () {
+  return () => {
+    background.clearPermissionsLog()
   }
 }
 

@@ -28,6 +28,7 @@ import CancelTransaction from './cancel-transaction'
 import MetaMetricsOptInModal from './metametrics-opt-in-modal'
 import RejectTransactions from './reject-transactions'
 import ClearPermissions from './clear-permissions'
+import ClearPermissionsActivity from './clear-permissions-activity'
 import ConfirmCustomizeGasModal from '../gas-customization/gas-modal-page-container'
 import ConfirmDeleteNetwork from './confirm-delete-network'
 import AddToAddressBookModal from './add-to-addressbook-modal'
@@ -227,6 +228,19 @@ const MODALS = {
 
   CLEAR_PERMISSIONS: {
     contents: h(ClearPermissions),
+    mobileModalStyle: {
+      ...modalContainerMobileStyle,
+    },
+    laptopModalStyle: {
+      ...modalContainerLaptopStyle,
+    },
+    contentStyle: {
+      borderRadius: '8px',
+    },
+  },
+
+  CLEAR_PERMISSIONS_ACTIVITY: {
+    contents: h(ClearPermissionsActivity),
     mobileModalStyle: {
       ...modalContainerMobileStyle,
     },

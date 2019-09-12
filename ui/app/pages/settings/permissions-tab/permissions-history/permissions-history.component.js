@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { addressSlicer } from '../../../../helpers/utils/util'
 
 export default class PermissionsHistory extends Component {
 
@@ -20,6 +21,7 @@ export default class PermissionsHistory extends Component {
      *   [origin]: {
      *     [methodName]: {
      *       lastApproved: Date.now()
+     *       accounts?: [ ... ] // if methodName === 'eth_accounts'
      *     },
      *     ...
      *   },
@@ -59,13 +61,39 @@ export default class PermissionsHistory extends Component {
         <li key={m} className="settings-page__content-list-item">
           {m}
           <ul>
-            <li className="settings-page__content-list-item__sub">
+            <li className="settings-page__content-list-item__nested">
               {`Last Approved: ${dateString} ${timeString}`}
             </li>
+            {
+              m === 'eth_accounts'
+                ? this.renderAccountsList(methods[m])
+                : ''
+            }
           </ul>
         </li>
       )
     })
+  }
+
+  renderAccountsList (historyEntry) {
+    if (!historyEntry.accounts) return ''
+    return (
+      <li className="settings-page__content-list-item__nested">
+        {'Accounts Seen'}
+        <ul>
+          {
+            historyEntry.accounts.map((address, i) => (
+              <li
+                key={i}
+                className="settings-page__content-list-item__nested__nested"
+              >
+                {addressSlicer(address)}
+              </li>
+            ))
+          }
+        </ul>
+      </li>
+    )
   }
 
   render () {

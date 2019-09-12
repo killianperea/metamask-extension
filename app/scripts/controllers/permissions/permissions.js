@@ -120,7 +120,7 @@ class PermissionsController {
    */
   clearHistory () {
     this.store.updateState({
-      [HISTORY_STORE_KEY]: [],
+      [HISTORY_STORE_KEY]: {},
     })
   }
 

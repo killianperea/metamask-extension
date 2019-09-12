@@ -172,11 +172,13 @@ export default class PermissionsList extends Component {
                   </summary>
                   <ul>
                     {
-                      permissions[domain].permissions.map(perm => {
-                        return this.renderPermissionsListItem(
-                          perm, permissionsDescriptions[perm.parentCapability]
-                        )
-                      })
+                      permissions[domain].permissions
+                        .sort((a, b) => a.parentCapability.localeCompare(b.parentCapability))
+                        .map(perm => {
+                          return this.renderPermissionsListItem(
+                            perm, permissionsDescriptions[perm.parentCapability]
+                          )
+                        })
                     }
                   </ul>
                 </details>
@@ -213,7 +215,7 @@ export default class PermissionsList extends Component {
       <ul>
         {
           permission.caveats.map((caveat, i) => (
-            <li key={i} className="settings-page__content-list-item__sub">
+            <li key={i} className="settings-page__content-list-item__nested">
               {t('caveat_' + caveat.type)}
               {this.renderCaveatValue(caveat.value)}
             </li>
@@ -229,7 +231,10 @@ export default class PermissionsList extends Component {
         <ul>
           {
             value.map((v, i) => (
-              <li key={i} className="settings-page__content-list-item__caveat-value">
+              <li
+                key={i}
+                className="settings-page__content-list-item__nested__nested"
+              >
                 {
                   typeof v === 'string' && isValidAddress(v)
                     ? addressSlicer(v)

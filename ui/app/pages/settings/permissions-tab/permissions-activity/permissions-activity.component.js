@@ -12,7 +12,7 @@ export default class PermissionsActivity extends Component {
     t: PropTypes.func,
   }
 
-  shouldComponentUpdate(nextProps) {
+  shouldComponentUpdate (nextProps) {
     if (
       (nextProps.permissionsLog.length === 0 && this.props.permissionsLog.length === 0) ||
       nextProps.permissionsLog.length !== this.props.permissionsLog.length ||
@@ -107,11 +107,13 @@ export default class PermissionsActivity extends Component {
       }
     } else {
       if (Array.isArray(e.response.result)) {
-        if (e.response.result.length === 0) return (
-          <li className="settings-page__content-list-item">
-            {'None.'}
-          </li>
-        )
+        if (e.response.result.length === 0) {
+          return (
+            <li className="settings-page__content-list-item">
+              {'None.'}
+            </li>
+          )
+        }
         return e.response.result.map((r, i) => (
           <li key={i} className="settings-page__content-list-item">
             {stringify(r)}

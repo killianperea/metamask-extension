@@ -1,5 +1,7 @@
 
 const clone = require('clone')
+const { isValidAddress } = require('ethereumjs-util')
+
 const LOG_LIMIT = 100
 
 /**
@@ -7,7 +9,7 @@ const LOG_LIMIT = 100
  * permissions-related methods.
  */
 module.exports = function createLoggerMiddleware ({
-  walletPrefix, restrictedMethods, store, logStoreKey, historyStoreKey
+  walletPrefix, restrictedMethods, store, logStoreKey, historyStoreKey,
 }) {
   return (req, res, next, _end) => {
 
@@ -24,7 +26,7 @@ module.exports = function createLoggerMiddleware ({
       return next()
     }
 
-    next((cb) => {
+    next(cb => {
       const time = Date.now()
       addResponse(activityEntry, res, time)
       if (!res.error && requestedMethods) {
@@ -77,27 +79,47 @@ module.exports = function createLoggerMiddleware ({
 
   function logHistory (requestedMethods, origin, result, time) {
 
+    let accounts
     const entries = result
-      .map(perm => perm.parentCapability)
+      .map(perm => {
+        if (perm.parentCapability === 'eth_accounts') {
+          accounts = getAccountsFromPermission(perm)
+        }
+        return perm.parentCapability
+      })
       .reduce((acc, m) => {
         if (requestedMethods.includes(m)) {
           acc[m] = {
-            lastApproved: time
+            lastApproved: time,
+          }
+          if (m === 'eth_accounts') {
+            acc[m].accounts = accounts
           }
         }
         return acc
       }, {})
-    
+
     if (Object.keys(entries).length > 0) {
-      commitHistory(origin, entries)
+      commitHistory(origin, entries, accounts)
     }
   }
 
-  function commitHistory (origin, entries) {
+  function commitHistory (origin, entries, accounts) {
+
     const history = store.getState()[historyStoreKey]
+
+    if (Array.isArray(accounts)) {
+      if (history[origin] && history[origin]['eth_accounts']) {
+        history[origin]['eth_accounts']['accounts']
+          .filter(acc => !accounts.includes(acc))
+          .forEach(acc => accounts.unshift(acc))
+      }
+      accounts.sort()
+    }
+
     history[origin] = {
       ...history[origin],
-      ...entries
+      ...entries,
     }
     store.updateState({ [historyStoreKey]: history })
   }
@@ -113,4 +135,17 @@ function cloneObj (obj) {
     } catch (_) {}
   }
   return { ...obj }
+}
+
+function getAccountsFromPermission (perm) {
+  if (perm.parentCapability !== 'eth_accounts' || !perm.caveats) return []
+  const accounts = {}
+  for (const c of perm.caveats) {
+    if (c.type === 'filterResponse' && Array.isArray(c.value)) {
+      for (const v of c.value) {
+        if (isValidAddress(v)) accounts[v] = true
+      }
+    }
+  }
+  return Object.keys(accounts)
 }

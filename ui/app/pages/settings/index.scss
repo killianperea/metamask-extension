@@ -255,14 +255,14 @@
   &__content-list-item {
     margin: 5px 0 0 10px;
 
-    &__sub {
+    &__nested {
       list-style-type: disc;
       margin: 5px 0 0 50px;
-    }
 
-    &__caveat-value {
-      list-style-type: disc;
-      margin: 5px 0 0 30px;
+      &__nested {
+        list-style-type: disc;
+        margin: 5px 0 0 30px;
+      }
     }
   }
 

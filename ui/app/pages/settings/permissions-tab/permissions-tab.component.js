@@ -67,21 +67,21 @@ export default class PermissionsTab extends Component {
           siteMetadata={this.props.siteMetadata}
         />
         {
-           this.renderClearButton(
-             'clearPermissions',
-             this.props.showClearPermissionsModal,
-             !hasPermissions
-           ) 
+          this.renderClearButton(
+            'clearPermissions',
+            this.props.showClearPermissionsModal,
+            !hasPermissions
+          )
         }
         <PermissionsActivity
           permissionsLog={this.props.permissionsLog}
         />
         {
-           this.renderClearButton(
-             'clearPermissionsActivity',
-             this.props.showClearPermissionsActivityModal,
-             !hasPermissionsActivity
-           ) 
+          this.renderClearButton(
+            'clearPermissionsActivity',
+            this.props.showClearPermissionsActivityModal,
+            !hasPermissionsActivity
+          )
         }
       </div>
     )

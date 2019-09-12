@@ -28,7 +28,7 @@ class PermissionsController {
     restoredState = {}) {
     this.store = new ObservableStore({
       [METADATA_STORE_KEY]: { ...restoredState[METADATA_STORE_KEY] },
-      [LOG_STORE_KEY]: restoredState[LOG_STORE_KEY] || []
+      [LOG_STORE_KEY]: restoredState[LOG_STORE_KEY] || [],
     })
     this._openPopup = openPopup
     this._closePopup = closePopup

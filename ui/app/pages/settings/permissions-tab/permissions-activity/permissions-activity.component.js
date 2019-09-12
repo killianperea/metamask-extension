@@ -32,11 +32,23 @@ export default class PermissionsLog extends Component {
         {
           permissionsLog.map((e, i) => {
             const date = new Date(e.requestTime)
+            const dateString = date.toLocaleDateString()
+            const timeString = date.toLocaleTimeString(
+              [], {hour: '2-digit', minute: '2-digit'}
+            )
+            const methodName = (
+              e.method.startsWith('wallet_')
+                ? e.method.split('wallet_')[1]
+                : e.method
+            )
             return (
               <li key={i}>
                 <details className="settings-page__content-list-details">
                   <summary>
-                    {`${date.toLocaleDateString()} ${date.toLocaleTimeString()} | ${e.method}`}
+                    {
+                      `${dateString} ${timeString} | ` +
+                      `${e.origin} | ${methodName}`
+                    }
                     <i className="caret"></i>
                   </summary>
                   <ul>
@@ -58,11 +70,13 @@ export default class PermissionsLog extends Component {
         e.method.endsWith('getPermissions') ||
         e.method.endsWith('requestPermissions')
       ) {
-        if (e.response.result.length === 0) return (
-          <li className="settings-page__content-list-item">
-            {'[]'}
-          </li>
-        )
+        if (e.response.result.length === 0) {
+          return (
+            <li className="settings-page__content-list-item">
+              {'[]'}
+            </li>
+          )
+        }
         return e.response.result.map(perm => (
           <li
             key={perm.parentCapability}

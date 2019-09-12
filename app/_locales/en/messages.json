@@ -68,7 +68,7 @@
   "clearPermissionsDescription": {
     "message": "Clear permissions so that all dapps/websites must request access again."
   },
-  "updatePermissionsData": {
+  "updatePermissions": {
     "message": "Update Permissions"
   },
   "permissionsActivitySettings": {
@@ -85,6 +85,21 @@
   },
   "clearPermissionsActivityDescription": {
     "message": "Clear the permissions activity log."
+  },
+  "permissionsHistorySettings": {
+    "message": "Permissions History"
+  },
+  "permissionsHistoryDescription": {
+    "message": "A list of dapps/domains and all permissions they've ever had."
+  },
+  "permissionsHistoryEmpty": {
+    "message": "No permissions history found."
+  },
+  "clearPermissionsHistory": {
+    "message": "Clear Permissions History"
+  },
+  "clearPermissionsHistoryDescription": {
+    "message": "Clear the permissions history."
   },
   "reject": {
     "message": "Reject"

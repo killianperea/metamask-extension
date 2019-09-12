@@ -349,6 +349,7 @@ var actions = {
   // Permissions
   approvePermissionsRequest,
   clearPermissions,
+  clearPermissionsHistory,
   clearPermissionsLog,
   rejectPermissionsRequest,
   removePermissionsFor,
@@ -2698,6 +2699,15 @@ function removePermissionsFor (domains) {
 function clearPermissions () {
   return () => {
     background.clearPermissions()
+  }
+}
+
+/**
+ * Clears the permission log.
+ */
+function clearPermissionsHistory () {
+  return () => {
+    background.clearPermissionsHistory()
   }
 }
 

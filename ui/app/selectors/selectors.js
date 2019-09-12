@@ -55,6 +55,7 @@ const selectors = {
   getAllPermissions,
   getPermissionsRequests,
   getPermissionsDescriptions,
+  getPermissionsHistory,
   getPermissionsLog,
   getSiteMetadata,
   getActiveTab,
@@ -355,6 +356,10 @@ function getPermissionsDescriptions (state) {
 
 function getPermissionsRequests (state) {
   return state.metamask.permissionsRequests
+}
+
+function getPermissionsHistory (state) {
+  return state.metamask.permissionsHistory
 }
 
 function getPermissionsLog (state) {

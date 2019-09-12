@@ -12,6 +12,7 @@ const SAFE_METHODS = require('./permissions-safe-methods.json')
 
 const METADATA_STORE_KEY = 'siteMetadata'
 const LOG_STORE_KEY = 'permissionsLog'
+const HISTORY_STORE_KEY = 'permissionsHistory'
 const WALLET_METHOD_PREFIX = 'wallet_'
 const INTERNAL_METHOD_PREFIX = 'metamask_'
 
@@ -27,8 +28,9 @@ class PermissionsController {
     restoredPermissions = {},
     restoredState = {}) {
     this.store = new ObservableStore({
-      [METADATA_STORE_KEY]: { ...restoredState[METADATA_STORE_KEY] },
+      [METADATA_STORE_KEY]: restoredState[METADATA_STORE_KEY] || {},
       [LOG_STORE_KEY]: restoredState[LOG_STORE_KEY] || [],
+      [HISTORY_STORE_KEY]: restoredState[HISTORY_STORE_KEY] || {},
     })
     this._openPopup = openPopup
     this._closePopup = closePopup
@@ -49,7 +51,8 @@ class PermissionsController {
       walletPrefix: WALLET_METHOD_PREFIX,
       restrictedMethods: Object.keys(this._restrictedMethods),
       store: this.store,
-      storeKey: LOG_STORE_KEY,
+      logStoreKey: LOG_STORE_KEY,
+      historyStoreKey: HISTORY_STORE_KEY,
     }))
     engine.push(this.permissions.providerMiddlewareFunction.bind(
       this.permissions, { origin }
@@ -109,6 +112,15 @@ class PermissionsController {
   clearLog () {
     this.store.updateState({
       [LOG_STORE_KEY]: [],
+    })
+  }
+
+  /**
+   * Clears the permissions history.
+   */
+  clearHistory () {
+    this.store.updateState({
+      [HISTORY_STORE_KEY]: [],
     })
   }
 
@@ -182,12 +194,7 @@ class PermissionsController {
 
         return new Promise((resolve, reject) => {
           this.pendingApprovals[id] = { resolve, reject }
-        },
-        // TODO: This should be persisted/restored state.
-        {})
-
-        // TODO: Attenuate requested permissions in approval screen.
-        // Like selecting the account to display.
+        })
       },
     }, initState)
   }

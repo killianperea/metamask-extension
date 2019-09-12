@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 import Button from '../../../components/ui/button'
 import PermissionsList from './permissions-list'
 import PermissionsActivity from './permissions-activity'
+import PermissionsHistory from './permissions-history'
 
 export default class PermissionsTab extends Component {
 
@@ -11,10 +12,12 @@ export default class PermissionsTab extends Component {
     warning: PropTypes.string,
     permissions: PropTypes.object.isRequired,
     permissionsDescriptions: PropTypes.object.isRequired,
+    permissionsHistory: PropTypes.object.isRequired,
     permissionsLog: PropTypes.array.isRequired,
     removePermissionsFor: PropTypes.func.isRequired,
     showClearPermissionsModal: PropTypes.func.isRequired,
     showClearPermissionsActivityModal: PropTypes.func.isRequired,
+    showClearPermissionsHistoryModal: PropTypes.func.isRequired,
     siteMetadata: PropTypes.object,
   }
 
@@ -56,6 +59,7 @@ export default class PermissionsTab extends Component {
     const { warning } = this.props
     const hasPermissions = Object.keys(this.props.permissions).length > 0
     const hasPermissionsActivity = this.props.permissionsLog.length > 0
+    const hasPermissionsHistory = Object.keys(this.props.permissionsHistory).length > 0
 
     return (
       <div className="settings-page__body">
@@ -71,6 +75,16 @@ export default class PermissionsTab extends Component {
             'clearPermissions',
             this.props.showClearPermissionsModal,
             !hasPermissions
+          )
+        }
+        <PermissionsHistory
+          permissionsHistory={this.props.permissionsHistory}
+        />
+        {
+          this.renderClearButton(
+            'clearPermissionsHistory',
+            this.props.showClearPermissionsHistoryModal,
+            !hasPermissionsHistory
           )
         }
         <PermissionsActivity

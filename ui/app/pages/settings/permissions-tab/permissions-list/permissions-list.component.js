@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import deepEqual from 'fast-deep-equal'
 import Button from '../../../../components/ui/button'
 
-import { addressSlicer, isValidAddress } from '../../../../helpers/utils/util'
+import { addressSlicer, isValidAddress, stringify } from '../../../../helpers/utils/util'
 
 export default class PermissionsList extends Component {
 
@@ -213,7 +213,7 @@ export default class PermissionsList extends Component {
       <ul>
         {
           permission.caveats.map((caveat, i) => (
-            <li key={i} className="settings-page__content-list-item__caveat">
+            <li key={i} className="settings-page__content-list-item__sub">
               {t('caveat_' + caveat.type)}
               {this.renderCaveatValue(caveat.value)}
             </li>
@@ -235,7 +235,7 @@ export default class PermissionsList extends Component {
                     ? addressSlicer(v)
                     : typeof v !== 'object'
                       ? v
-                      : JSON.stringify(v)
+                      : stringify(v)
                 }
               </li>
             ))
@@ -245,7 +245,7 @@ export default class PermissionsList extends Component {
     } else if (typeof value !== 'object') {
       return value
     } else {
-      return JSON.stringify(value)
+      return stringify(value)
     }
   }
 
@@ -279,7 +279,7 @@ export default class PermissionsList extends Component {
                 this.updatePermissions()
               }}
             >
-              { t('updatePermissionsData') }
+              { t('updatePermissions') }
             </Button>
           </div>
         </div>

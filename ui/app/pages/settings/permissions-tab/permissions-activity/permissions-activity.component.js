@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
+import { stringify } from '../../../../helpers/utils/util'
 
-export default class PermissionsLog extends Component {
+export default class PermissionsActivity extends Component {
 
   static propTypes = {
     permissionsLog: PropTypes.array.isRequired,
@@ -9,6 +10,17 @@ export default class PermissionsLog extends Component {
 
   static contextTypes = {
     t: PropTypes.func,
+  }
+
+  shouldComponentUpdate(nextProps) {
+    if (
+      (nextProps.permissionsLog.length === 0 && this.props.permissionsLog.length === 0) ||
+      nextProps.permissionsLog.length !== this.props.permissionsLog.length ||
+      nextProps.permissionsLog[0].id !== this.props.permissionsLog[0].id
+    ) {
+      return true
+    }
+    return false
   }
 
   renderPermissionsActivityList () {
@@ -64,6 +76,7 @@ export default class PermissionsLog extends Component {
   }
 
   renderRpcResponse (e) {
+    if (!e.response) return 'This request did not produce a response.'
     if (!e.success) return this.renderRpcError(e.response.error)
     if (e.methodType === 'internal') {
       if (
@@ -73,7 +86,7 @@ export default class PermissionsLog extends Component {
         if (e.response.result.length === 0) {
           return (
             <li className="settings-page__content-list-item">
-              {'[]'}
+              {'None.'}
             </li>
           )
         }
@@ -88,21 +101,26 @@ export default class PermissionsLog extends Component {
       } else {
         return (
           <li className="settings-page__content-list-item">
-            {JSON.stringify(e.response.result)}
+            {stringify(e.response.result)}
           </li>
         )
       }
     } else {
       if (Array.isArray(e.response.result)) {
+        if (e.response.result.length === 0) return (
+          <li className="settings-page__content-list-item">
+            {'None.'}
+          </li>
+        )
         return e.response.result.map((r, i) => (
           <li key={i} className="settings-page__content-list-item">
-            {JSON.stringify(r)}
+            {stringify(r)}
           </li>
         ))
       } else {
         return (
           <li className="settings-page__content-list-item">
-            {JSON.stringify(e.response.result)}
+            {stringify(e.response.result)}
           </li>
         )
       }

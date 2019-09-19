@@ -11,15 +11,13 @@ class ProviderApprovalController extends SafeEventEmitter {
    *
    * @param {Object} [config] - Options to configure controller
    */
-  constructor ({ closePopup, initState, keyringController, openPopup, preferencesController } = {}) {
+  constructor ({ closePopup, initState = {}, keyringController, openPopup, preferencesController } = {}) {
     super()
     this.closePopup = closePopup
     this.keyringController = keyringController
     this.openPopup = openPopup
     this.preferencesController = preferencesController
     this.memStore = new ObservableStore({
-      approvedOrigins: {},
-      dismissedOrigins: {},
       providerRequests: [],
     })
 

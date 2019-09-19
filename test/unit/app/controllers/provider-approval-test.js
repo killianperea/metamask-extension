@@ -27,7 +27,7 @@ describe('ProviderApprovalController', () => {
 
       controller._handleProviderRequest('example.com', 'Example', 'https://example.com/logo.svg')
       assert.deepEqual(controller._getMergedState(), {
-        approvedOrigins: {},
+        approvedOrigins: { 'verify.sendwyre.com': true },
         providerRequests: [{
           origin: 'example.com',
           siteTitle: 'Example',
@@ -43,7 +43,7 @@ describe('ProviderApprovalController', () => {
 
       controller._handleProviderRequest('example.com', 'Example', 'https://example.com/logo.svg')
       assert.deepEqual(controller._getMergedState(), {
-        approvedOrigins: {},
+        approvedOrigins: { 'verify.sendwyre.com': true },
         providerRequests: [{
           origin: 'example.com',
           siteTitle: 'Example',
@@ -60,7 +60,7 @@ describe('ProviderApprovalController', () => {
       controller._handleProviderRequest('example1.com', 'Example 1', 'https://example1.com/logo.svg')
       controller._handleProviderRequest('example2.com', 'Example 2', 'https://example2.com/logo.svg')
       assert.deepEqual(controller._getMergedState(), {
-        approvedOrigins: {},
+        approvedOrigins: { 'verify.sendwyre.com': true },
         providerRequests: [{
           origin: 'example1.com',
           siteTitle: 'Example 1',
@@ -81,7 +81,7 @@ describe('ProviderApprovalController', () => {
       controller._handleProviderRequest('example1.com', 'Example 1', 'https://example1.com/logo.svg')
       controller._handleProviderRequest('example2.com', 'Example 2', 'https://example2.com/logo.svg')
       assert.deepEqual(controller._getMergedState(), {
-        approvedOrigins: {},
+        approvedOrigins: { 'verify.sendwyre.com': true },
         providerRequests: [{
           origin: 'example1.com',
           siteTitle: 'Example 1',
@@ -129,6 +129,7 @@ describe('ProviderApprovalController', () => {
             siteTitle: 'Example',
             siteImage: 'https://example.com/logo.svg',
           },
+          'verify.sendwyre.com': true,
         },
       })
       controller._handleProviderRequest('example.com', 'Example', 'https://example.com/logo.svg')
@@ -151,6 +152,7 @@ describe('ProviderApprovalController', () => {
             siteTitle: 'Example',
             siteImage: 'https://example.com/logo.svg',
           },
+          'verify.sendwyre.com': true,
         },
       })
     })
@@ -170,6 +172,7 @@ describe('ProviderApprovalController', () => {
             siteTitle: 'Example',
             siteImage: 'https://example.com/logo.svg',
           },
+          'verify.sendwyre.com': true,
         },
       })
     })
@@ -187,6 +190,7 @@ describe('ProviderApprovalController', () => {
             siteTitle: null,
             siteImage: null,
           },
+          'verify.sendwyre.com': true,
         },
       })
     })
@@ -203,7 +207,7 @@ describe('ProviderApprovalController', () => {
       controller.rejectProviderRequestByOrigin('example.com')
       assert.deepEqual(controller._getMergedState(), {
         providerRequests: [],
-        approvedOrigins: {},
+        approvedOrigins: { 'verify.sendwyre.com': true },
       })
     })
 
@@ -215,7 +219,7 @@ describe('ProviderApprovalController', () => {
       controller.rejectProviderRequestByOrigin('example.com')
       assert.deepEqual(controller._getMergedState(), {
         providerRequests: [],
-        approvedOrigins: {},
+        approvedOrigins: { 'verify.sendwyre.com': true },
       })
     })
   })

@@ -45,6 +45,15 @@ const defaultNetworksData = [
     blockExplorerUrl: 'https://goerli.etherscan.io',
   },
   {
+    labelKey: 'bloomen', // TODO
+    iconColor: '#3099f2',
+    providerType: 'bloomen',
+    rpcUrl: 'https://0x.bloomen.io/rpc/telsius/wallet',
+    chainId: '25',
+    ticker: 'BLO',
+    blockExplorerUrl: 'https://bloomen.etherscan.io',
+  },
+  {
     labelKey: 'localhost',
     iconColor: 'white',
     border: '1px solid #6A737D',

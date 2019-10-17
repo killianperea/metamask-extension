@@ -21,8 +21,11 @@ const {
   MAINNET,
   LOCALHOST,
   GOERLI,
+  BLOOMEN,
 } = require('./enums')
 const INFURA_PROVIDER_TYPES = [ROPSTEN, RINKEBY, KOVAN, MAINNET, GOERLI]
+
+const BLOOMEN_PROVIDER_TYPES = [BLOOMEN]
 
 const env = process.env.METAMASK_ENV
 const METAMASK_DEBUG = process.env.METAMASK_DEBUG
@@ -143,8 +146,13 @@ module.exports = class NetworkController extends EventEmitter {
 
   async setProviderType (type, rpcTarget = '', ticker = 'ETH', nickname = '') {
     assert.notEqual(type, 'rpc', `NetworkController - cannot call "setProviderType" with type 'rpc'. use "setRpcTarget"`)
-    assert(INFURA_PROVIDER_TYPES.includes(type) || type === LOCALHOST, `NetworkController - Unknown rpc type "${type}"`)
-    const providerConfig = { type, rpcTarget, ticker, nickname }
+    assert(BLOOMEN_PROVIDER_TYPES.includes(type) || INFURA_PROVIDER_TYPES.includes(type) || type === LOCALHOST, `NetworkController - Unknown rpc type "${type}"`)
+    let providerConfig
+    if (type === 'bloomen') {
+      providerConfig = { type, rpcTarget: 'https://0x.bloomen.io/rpc/telsius/kikitest', ticker, nickname: 'bloomen' }
+    } else {
+      providerConfig = { type, rpcTarget, ticker, nickname }
+    }
     this.providerConfig = providerConfig
   }
 
@@ -182,7 +190,9 @@ module.exports = class NetworkController extends EventEmitter {
       this._configureLocalhostProvider()
     // url-based rpc endpoints
     } else if (type === 'rpc') {
-      this._configureStandardProvider({ rpcUrl: rpcTarget, chainId, ticker, nickname })
+      this._configureStandardProvider({ rpcUrl: rpcTarget, chainId, ticker, nickname, type })
+    } else if (type === 'bloomen') {
+      this._configureStandardProvider({ rpcUrl: rpcTarget, chainId: '83584648538', ticker, nickname })
     } else {
       throw new Error(`NetworkController - _configureProvider - unknown type "${type}"`)
     }
@@ -205,11 +215,11 @@ module.exports = class NetworkController extends EventEmitter {
     this._setNetworkClient(networkClient)
   }
 
-  _configureStandardProvider ({ rpcUrl, chainId, ticker, nickname }) {
+  _configureStandardProvider ({ rpcUrl, chainId, ticker, nickname, type }) {
     log.info('NetworkController - configureStandardProvider', rpcUrl)
     const networkClient = createJsonRpcClient({ rpcUrl })
     // hack to add a 'rpc' network with chainId
-    networks.networkList['rpc'] = {
+    networks.networkList[type] = {
       chainId: chainId,
       rpcUrl,
       ticker: ticker || 'ETH',
@@ -219,7 +229,7 @@ module.exports = class NetworkController extends EventEmitter {
     var settings = {
       network: chainId,
     }
-    settings = extend(settings, networks.networkList['rpc'])
+    settings = extend(settings, networks.networkList[type])
     this.networkConfig.putState(settings)
     this._setNetworkClient(networkClient)
   }

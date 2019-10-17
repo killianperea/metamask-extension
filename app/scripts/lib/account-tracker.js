@@ -15,8 +15,8 @@ const Web3 = require('web3')
 const SINGLE_CALL_BALANCES_ABI = require('single-call-balance-checker-abi')
 
 const { bnToHex } = require('./util')
-const { MAINNET_CODE, RINKEBY_CODE, ROPSTEN_CODE, KOVAN_CODE } = require('../controllers/network/enums')
-const { SINGLE_CALL_BALANCES_ADDRESS, SINGLE_CALL_BALANCES_ADDRESS_RINKEBY, SINGLE_CALL_BALANCES_ADDRESS_ROPSTEN, SINGLE_CALL_BALANCES_ADDRESS_KOVAN } = require('../controllers/network/contract-addresses')
+const { MAINNET_CODE, RINKEBY_CODE, ROPSTEN_CODE, KOVAN_CODE, BLOOMEN_CODE } = require('../controllers/network/enums')
+const { SINGLE_CALL_BALANCES_ADDRESS, SINGLE_CALL_BALANCES_ADDRESS_RINKEBY, SINGLE_CALL_BALANCES_ADDRESS_ROPSTEN, SINGLE_CALL_BALANCES_ADDRESS_KOVAN, SINGLE_CALL_BALANCES_ADDRESS_BLOOMEN } = require('../controllers/network/contract-addresses')
 
 
 class AccountTracker {
@@ -198,6 +198,9 @@ class AccountTracker {
         await this._updateAccountsViaBalanceChecker(addresses, SINGLE_CALL_BALANCES_ADDRESS_KOVAN)
         break
 
+      case BLOOMEN_CODE:
+        await this._updateAccountsViaBalanceChecker(addresses, SINGLE_CALL_BALANCES_ADDRESS_BLOOMEN)
+        break
       default:
         await Promise.all(addresses.map(this._updateAccount.bind(this)))
     }
